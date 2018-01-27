@@ -338,11 +338,13 @@ public class GUI extends javax.swing.JFrame{
             */
             if(xChoice.getSelectedItem().equals("game_id")){
                 try{
+                    Title.setText("Importing " + xChoice.getSelectedItem() + " from SQL database...");
                   data = Database.getAxis(("SELECT * FROM games_users WHERE user_id = " + user.getId()), xChoice.getSelectedItem());
                   for(double i = 0; i < data.size() - 1; i += (double)canvas.getWidth()/(double)data.size()){
-                      System.out.println(i);
+                      Title.setText("Generating X Axis..." + (int)(i/((double)data.size()-1) * 100) + "%");
                       xAxis.add(i);
                   }
+                  Title.setText(xChoice.getSelectedItem() + " imported.");
                 }catch(Exception e){
                     System.out.println(e);
                 }  
@@ -351,14 +353,17 @@ public class GUI extends javax.swing.JFrame{
             
             ArrayList<Double> yAxis = new ArrayList<>();
             try{
+                Title.setText("Importing " + yChoice.getSelectedItem() + " from SQL database...");
                 yAxis = Database.getAxis(("SELECT * FROM games_users WHERE user_id =" + user.getId()), yChoice.getSelectedItem());
+                Title.setText(yChoice.getSelectedItem() + " imported.");
             }catch(Exception e){
                 System.out.println(e);
             }
             
-            Title.setText("Graph of " + yChoice.getSelectedItem() + " versus " + xChoice.getSelectedItem());
+            
             
             for(int i = 0; i < data.size() - 2; i++){
+                
                 double beforeX = (double)xAxis.get(i);
                 double beforeY = (double)yAxis.get(i) ;//* (canvas.getHeight()/(highestY - lowestY));
                 double afterX = (double)xAxis.get(i + 1);
@@ -370,8 +375,11 @@ public class GUI extends javax.swing.JFrame{
                 
                 
                 step(beforeX,beforeY,afterX,afterY);
+                int progress = (int)(((double)i*100)/(double)data.size());
+                Title.setText("Drawing graph..." + progress + "%");
                 System.out.println("GUI.buttonDrawActionPerformed: Plotting line from (" + beforeX  + "," + beforeY + ") to (" + afterX + "," + afterY + ")");
             }
+            Title.setText("Graph of " + yChoice.getSelectedItem() + " versus " + xChoice.getSelectedItem());
             
         }
     }//GEN-LAST:event_buttonDrawActionPerformed
