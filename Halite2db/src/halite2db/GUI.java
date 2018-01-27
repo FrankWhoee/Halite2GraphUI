@@ -312,9 +312,12 @@ public class GUI extends javax.swing.JFrame{
     }//GEN-LAST:event_fieldUserIdActionPerformed
 
     private void buttonDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDrawActionPerformed
+        refreshPanel();
         for(User user: users){
+            ArrayList<Double> data = new ArrayList<>();
             ArrayList<Double> xAxis = new ArrayList<>();
-            double highestY = 1;
+            
+            /*double highestY = 1;
             double lowestY = 1;
             try{
                 highestY = Double.parseDouble(Database.getString(("SELECT MAX(" + yChoice.getSelectedItem() + ") FROM games_users WHERE user_id = " + user.getId()), yChoice.getSelectedItem()));
@@ -322,16 +325,19 @@ public class GUI extends javax.swing.JFrame{
             }catch(Exception e){
                 System.out.println(e);
             }
-            
-            try{
-                ArrayList<Double> data = Database.getAxis(("SELECT * FROM games_users WHERE user_id = " + user.getId()), xChoice.getSelectedItem());
-                for(double i = 0; i < data.size() - 1; i += (double)canvas.getWidth()/(double)data.size()){
-                    System.out.println(i);
-                    xAxis.add(i);
-                }
-            }catch(Exception e){
-                System.out.println(e);
+            */
+            if(xChoice.getSelectedItem().equals("game_id")){
+                try{
+                  data = Database.getAxis(("SELECT * FROM games_users WHERE user_id = " + user.getId()), xChoice.getSelectedItem());
+                  for(double i = 0; i < data.size() - 1; i += (double)canvas.getWidth()/(double)data.size()){
+                      System.out.println(i);
+                      xAxis.add(i);
+                  }
+                }catch(Exception e){
+                    System.out.println(e);
+                }  
             }
+            
             
             ArrayList<Double> yAxis = new ArrayList<>();
             try{
@@ -340,7 +346,7 @@ public class GUI extends javax.swing.JFrame{
                 System.out.println(e);
             }
             
-            for(int i = 0; i < xAxis.size() - 2; i++){
+            for(int i = 0; i < data.size() - 2; i++){
                 double beforeX = (double)xAxis.get(i);
                 double beforeY = (double)yAxis.get(i) ;//* (canvas.getHeight()/(highestY - lowestY));
                 double afterX = (double)xAxis.get(i + 1);
