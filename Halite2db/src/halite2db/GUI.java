@@ -363,6 +363,11 @@ public class GUI extends javax.swing.JFrame{
                 double beforeY = (double)yAxis.get(i) ;//* (canvas.getHeight()/(highestY - lowestY));
                 double afterX = (double)xAxis.get(i + 1);
                 double afterY = (double)yAxis.get(i + 1) ;//* (canvas.getHeight()/(highestY - lowestY));
+                if(!yChoice.getSelectedItem().equals("leaderboard_rank")){ 
+                    beforeY = 585 - (double)yAxis.get(i);
+                    afterY =585 - (double)yAxis.get(i + 1) ;
+                }
+                
                 
                 step(beforeX,beforeY,afterX,afterY);
                 System.out.println("GUI.buttonDrawActionPerformed: Plotting line from (" + beforeX  + "," + beforeY + ") to (" + afterX + "," + afterY + ")");
