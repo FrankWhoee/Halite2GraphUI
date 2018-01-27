@@ -18,12 +18,13 @@ public class GUI extends javax.swing.JFrame{
     private boolean active=false;
     private int stepDelay = 500;
     private Color borderColor=new Color(20,20,20);
-    
+    private ArrayList<Color> colours = new ArrayList<>();
     public GUI() {
         initComponents();
         initiateChoices();
         setUpImageBuffer();
         refreshPanel();
+        initiateColours();
     }
     @SuppressWarnings("serial")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -42,13 +43,13 @@ public class GUI extends javax.swing.JFrame{
         yChoice = new java.awt.Choice();
         label4 = new java.awt.Label();
         label5 = new java.awt.Label();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        display = new javax.swing.JTextArea();
         listUsers = new java.awt.List();
         canvas = new javax.swing.JPanel();
         orderChoice = new java.awt.Choice();
         label6 = new java.awt.Label();
         Title = new java.awt.Label();
+        labelColour = new javax.swing.JLabel();
+        display = new java.awt.TextArea();
 
         checkbox1.setLabel("checkbox1");
 
@@ -88,8 +89,6 @@ public class GUI extends javax.swing.JFrame{
             }
         });
 
-        fieldUsername.setEditable(false);
-        fieldUsername.setEnabled(false);
         fieldUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldUsernameActionPerformed(evt);
@@ -102,9 +101,16 @@ public class GUI extends javax.swing.JFrame{
 
         label5.setText("Y axis");
 
-        display.setColumns(20);
-        display.setRows(5);
-        jScrollPane2.setViewportView(display);
+        listUsers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listUsersMouseClicked(evt);
+            }
+        });
+        listUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listUsersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout canvasLayout = new javax.swing.GroupLayout(canvas);
         canvas.setLayout(canvasLayout);
@@ -120,7 +126,14 @@ public class GUI extends javax.swing.JFrame{
         label6.setText("Order in");
 
         Title.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
-        Title.setText("Graph");
+        Title.setText("Halite2 GraphUI");
+
+        labelColour.setBackground(new java.awt.Color(1, 1, 1));
+        labelColour.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        labelColour.setText("Nothing selected.");
+
+        display.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        display.setText("Welcome to Graph UI!");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,19 +141,16 @@ public class GUI extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(display, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonAddUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fieldUserId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonDraw, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                    .addComponent(buttonRemoveUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                    .addComponent(buttonDraw, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonRemoveUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fieldUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(xChoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(yChoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -154,14 +164,15 @@ public class GUI extends javax.swing.JFrame{
                             .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(labelColour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
@@ -191,14 +202,16 @@ public class GUI extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(listUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(listUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelColour, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(canvas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addComponent(display, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -238,23 +251,23 @@ public class GUI extends javax.swing.JFrame{
         
     }
     
-    public void step(double xbefore, double ybefore, double xAfter, double yAfter) {   
-            ibgLines.setColor(Color.RED);
+    public void step(double xbefore, double ybefore, double xAfter, double yAfter, Color colour) {   
+            ibgLines.setColor(colour);
             int xb = (int)xbefore;
             int yb = (int)ybefore;
             int xa = (int)xAfter;
             int ya = (int)yAfter;
             ibgLines.drawLine(xb,yb,xa,ya);
-        draw();
     }
     
     public void initiateChoices(){
-       // xChoice.add("mu");
+       
         xChoice.add("game_id");
-       // xChoice.add("user_id");
-        //xChoice.add("rank");
-        //xChoice.add("leaderboard_rank");
-        //xChoice.add("sigma");
+        xChoice.add("mu");
+        xChoice.add("user_id");
+        xChoice.add("rank");
+        xChoice.add("leaderboard_rank");
+        xChoice.add("sigma");
         
         yChoice.add("mu");
         yChoice.add("game_id");
@@ -265,6 +278,18 @@ public class GUI extends javax.swing.JFrame{
         
         orderChoice.add("ASC");
         orderChoice.add("DESC");
+    }
+    
+    public void initiateColours(){
+       colours.add(Color.BLACK);
+       colours.add(Color.RED);
+       colours.add(Color.BLUE);
+       colours.add(Color.GREEN);
+       colours.add(Color.YELLOW);
+       colours.add(Color.ORANGE);
+       colours.add(Color.CYAN);
+       colours.add(Color.MAGENTA);
+       colours.add(Color.PINK); 
     }
     
     public String getUsernameFromId(){
@@ -279,9 +304,7 @@ public class GUI extends javax.swing.JFrame{
         
     }
     
-    public String getIdFromUsername(){
-        String username = fieldUsername.getText();
-        username = "'" + username + "'";
+    public String getIdFromUsername(String username){
         try{
             String userId = Database.getString(("SELECT * FROM users WHERE username = " + username), "user_id");
             return userId;
@@ -293,28 +316,33 @@ public class GUI extends javax.swing.JFrame{
     }
     
     private void buttonAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddUserActionPerformed
+        display.setText("Adding user...");
         String userId = fieldUserId.getText();
         String username = "";
         String usernameUnmodified = "";
+        int randomIndex = (int)(Math.random() * colours.size());
+        Color randomColour = colours.get(randomIndex);
+        colours.remove(randomIndex);
+        
         if(userId.isEmpty()){
             username = fieldUsername.getText();
             usernameUnmodified = username;
             username = "'" + username + "'";
         }
-        User newUser = new User(userId, usernameUnmodified);
+        User newUser = new User(userId, usernameUnmodified, randomColour);
         if(userId.isEmpty()){
-            userId = getIdFromUsername();
-            
+            userId = getIdFromUsername(username);
+            newUser = new User(userId, usernameUnmodified, randomColour);
         }else{
             username = getUsernameFromId();
-            newUser = new User(userId, username);
+            newUser = new User(userId, username, randomColour);
         }
         
         if(!users.contains(newUser)){
             users.add(newUser);
         }
         updateList();
-        System.out.println(users.get(0).getId() + ", " + users.get(0).getName());
+        display.setText("New user added: " + newUser.getName() + ".User Id is " + newUser.getId());
     }//GEN-LAST:event_buttonAddUserActionPerformed
 
     private void fieldUserIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldUserIdActionPerformed
@@ -326,16 +354,6 @@ public class GUI extends javax.swing.JFrame{
         for(User user: users){
             ArrayList<Double> data = new ArrayList<>();
             ArrayList<Double> xAxis = new ArrayList<>();
-            
-            /*double highestY = 1;
-            double lowestY = 1;
-            try{
-                highestY = Double.parseDouble(Database.getString(("SELECT MAX(" + yChoice.getSelectedItem() + ") FROM games_users WHERE user_id = " + user.getId()), yChoice.getSelectedItem()));
-                lowestY = Double.parseDouble(Database.getString(("SELECT MIN(" + yChoice.getSelectedItem() + ") FROM games_users WHERE user_id = " + user.getId()), yChoice.getSelectedItem()));
-            }catch(Exception e){
-                System.out.println(e);
-            }
-            */
             if(xChoice.getSelectedItem().equals("game_id")){
                 try{
                     Title.setText("Importing " + xChoice.getSelectedItem() + " from SQL database...");
@@ -348,6 +366,15 @@ public class GUI extends javax.swing.JFrame{
                 }catch(Exception e){
                     System.out.println(e);
                 }  
+            }else{
+                try{
+                    Title.setText("Importing " + xChoice.getSelectedItem() + " from SQL database...");
+                    data = Database.getAxis(("SELECT * FROM games_users WHERE user_id = " + user.getId()), xChoice.getSelectedItem());
+                    xAxis = data;
+                    Title.setText(xChoice.getSelectedItem() + " imported.");
+                }catch(Exception e){
+                    System.out.println(e);
+                }
             }
             
             
@@ -359,26 +386,22 @@ public class GUI extends javax.swing.JFrame{
             }catch(Exception e){
                 System.out.println(e);
             }
-            
-            
-            
+
             for(int i = 0; i < data.size() - 2; i++){
-                
                 double beforeX = (double)xAxis.get(i);
-                double beforeY = (double)yAxis.get(i) ;//* (canvas.getHeight()/(highestY - lowestY));
+                double beforeY = (double)yAxis.get(i);
                 double afterX = (double)xAxis.get(i + 1);
-                double afterY = (double)yAxis.get(i + 1) ;//* (canvas.getHeight()/(highestY - lowestY));
+                double afterY = (double)yAxis.get(i + 1);
                 if(!yChoice.getSelectedItem().equals("leaderboard_rank")){ 
                     beforeY = 585 - (double)yAxis.get(i);
                     afterY =585 - (double)yAxis.get(i + 1) ;
                 }
-                
-                
-                step(beforeX,beforeY,afterX,afterY);
+                step(beforeX,beforeY,afterX,afterY, user.getColor());
                 int progress = (int)(((double)i*100)/(double)data.size());
                 Title.setText("Drawing graph..." + progress + "%");
                 System.out.println("GUI.buttonDrawActionPerformed: Plotting line from (" + beforeX  + "," + beforeY + ") to (" + afterX + "," + afterY + ")");
             }
+            draw();
             Title.setText("Graph of " + yChoice.getSelectedItem() + " versus " + xChoice.getSelectedItem());
             
         }
@@ -387,21 +410,23 @@ public class GUI extends javax.swing.JFrame{
     private void buttonRemoveUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveUserActionPerformed
         String userId = fieldUserId.getText();
         String username = "";
+        
         if(userId.isEmpty()){
             username = fieldUsername.getText();
             username = "'" + username + "'";
         }
         if(userId.isEmpty()){
-            userId = getIdFromUsername();
+            userId = getIdFromUsername(username);
         }else{
             username = getUsernameFromId();
         }
-        User newUser = new User(userId, username);
+        
         //users.remove(newUser);
         for(int index = users.size() - 1; index >= 0; index--){
-            if(users.get(index).getId().equals(newUser.getId())){
+            if(users.get(index).getId().equals(userId)){
+                colours.add(users.get(index).getColor());
                 users.remove(index);
-                System.out.println(newUser.getName() + " removed");
+                display.setText(username + " removed.");
             }
         }
         updateList();
@@ -410,6 +435,24 @@ public class GUI extends javax.swing.JFrame{
     private void fieldUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldUsernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldUsernameActionPerformed
+
+    private void listUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listUsersActionPerformed
+        
+    }//GEN-LAST:event_listUsersActionPerformed
+
+    private void listUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listUsersMouseClicked
+        String selectedUsername = listUsers.getSelectedItem();
+        labelColour.setText(selectedUsername);
+        selectedUsername = "'" + selectedUsername + "'";
+        String userId = getIdFromUsername(selectedUsername);
+        Color colour = Color.RED;
+        for(int index = users.size() - 1; index >= 0; index--){
+            if(users.get(index).getId().equals(userId)){
+                colour = users.get(index).getColor();
+            }
+        }
+        labelColour.setForeground(colour);
+    }//GEN-LAST:event_listUsersMouseClicked
 
     /**
      * @param args the command line arguments
@@ -453,16 +496,16 @@ public class GUI extends javax.swing.JFrame{
     private java.awt.Button buttonRemoveUser;
     private javax.swing.JPanel canvas;
     private java.awt.Checkbox checkbox1;
-    private javax.swing.JTextArea display;
+    private java.awt.TextArea display;
     private java.awt.TextField fieldUserId;
     private java.awt.TextField fieldUsername;
-    private javax.swing.JScrollPane jScrollPane2;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private java.awt.Label label3;
     private java.awt.Label label4;
     private java.awt.Label label5;
     private java.awt.Label label6;
+    private javax.swing.JLabel labelColour;
     private java.awt.List listUsers;
     private java.awt.Choice orderChoice;
     private java.awt.Choice xChoice;

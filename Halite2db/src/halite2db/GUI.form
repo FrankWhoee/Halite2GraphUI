@@ -30,24 +30,19 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" pref="861" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="canvas" max="32767" attributes="0"/>
-                          <Component id="Title" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="canvas" max="32767" attributes="0"/>
+                  <Component id="Title" max="32767" attributes="0"/>
+                  <Component id="display" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="buttonAddUser" max="32767" attributes="0"/>
                   <Component id="fieldUserId" max="32767" attributes="0"/>
-                  <Component id="buttonDraw" alignment="0" pref="177" max="32767" attributes="0"/>
-                  <Component id="buttonRemoveUser" alignment="1" pref="177" max="32767" attributes="0"/>
+                  <Component id="buttonDraw" alignment="0" max="32767" attributes="0"/>
+                  <Component id="buttonRemoveUser" alignment="1" max="32767" attributes="0"/>
                   <Component id="fieldUsername" alignment="0" max="32767" attributes="0"/>
                   <Component id="xChoice" max="32767" attributes="0"/>
                   <Component id="yChoice" alignment="0" max="32767" attributes="0"/>
@@ -64,6 +59,7 @@
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="labelColour" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -73,7 +69,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="label1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
@@ -104,16 +100,18 @@
                       <Component id="label2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="listUsers" min="-2" pref="239" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="labelColour" min="-2" pref="28" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="Title" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="canvas" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" min="-2" pref="96" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="display" min="-2" pref="108" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="29" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -162,10 +160,6 @@
       </Events>
     </Component>
     <Component class="java.awt.TextField" name="fieldUsername">
-      <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fieldUsernameActionPerformed"/>
       </Events>
@@ -189,22 +183,11 @@
         <Property name="text" type="java.lang.String" value="Y axis"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JTextArea" name="display">
-          <Properties>
-            <Property name="columns" type="int" value="20"/>
-            <Property name="rows" type="int" value="5"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
     <Component class="java.awt.List" name="listUsers">
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="listUsersMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listUsersActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="canvas">
 
@@ -233,7 +216,26 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Ubuntu" size="36" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Graph"/>
+        <Property name="text" type="java.lang.String" value="Halite2 GraphUI"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelColour">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="1" green="1" red="1" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Ubuntu" size="24" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Nothing selected."/>
+      </Properties>
+    </Component>
+    <Component class="java.awt.TextArea" name="display">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Ubuntu" size="18" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Welcome to Graph UI!"/>
       </Properties>
     </Component>
   </SubComponents>
